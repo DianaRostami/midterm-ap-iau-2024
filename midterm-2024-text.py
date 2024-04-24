@@ -81,6 +81,17 @@ def count_vowels(content):
 
     return vowel_count
 
+#count_silent_letters function counts the number of silent letters (consonants) in the given text content
+def count_silent_letters(content):
+    consonants = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'
+    silent_letter_count = 0
+
+    for char in content:
+        if char in consonants:
+            silent_letter_count += 1
+
+    return silent_letter_count
+
 
 # Select the file
 file_path = "input.txt"
@@ -116,3 +127,7 @@ if file_content is not None: #meaning the file was successfully read
     # Count vowels
     vowel_count = count_vowels(file_content)
     print("Number of English vowels:", vowel_count)
+
+    # Count silent letters
+    silent_letter_count = count_silent_letters(file_content)
+    print("Number of silent letters (consonants):", silent_letter_count)
