@@ -15,3 +15,10 @@ body {
     /*text place "cenetr" in elment*/
     text-align: center;
   }
+ blue-box {
+  width: 200px;
+  height: 200px;
+  background-color: #007bff;
+  border-radius: 10px;
+  animation: pulse 1s infinite alternate;
+}
