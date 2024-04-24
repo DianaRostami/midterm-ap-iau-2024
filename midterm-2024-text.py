@@ -70,6 +70,17 @@ def count_paragraphs(content):
 
     return paragraph_count
 
+#count_vowels function counts the number of English vowels in the given text content
+def count_vowels(content):
+    vowels = 'aeiouAEIOU'
+    vowel_count = 0
+
+    for char in content:
+        if char in vowels:
+            vowel_count += 1
+
+    return vowel_count
+
 
 # Select the file
 file_path = "input.txt"
@@ -101,3 +112,7 @@ if file_content is not None: #meaning the file was successfully read
     # Count paragraphs
     paragraph_count = count_paragraphs(file_content)
     print("Number of paragraphs:", paragraph_count)
+
+    # Count vowels
+    vowel_count = count_vowels(file_content)
+    print("Number of English vowels:", vowel_count)
