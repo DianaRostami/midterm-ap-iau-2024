@@ -26,3 +26,11 @@ h2 {
     font-size: 20px; /*choose a font*/
   
   }
+/*input as a text*/
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 20px; /*choose a font*/
+  
+  }
