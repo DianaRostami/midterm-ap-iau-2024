@@ -1,0 +1,17 @@
+body { 
+/*chooes fot*/
+    font-family: Arial, sans-serif;
+  }
+/*add container for external appearace*/
+  .container {
+    max-width: 400px; /*width*/
+    margin: 50px auto;/* put in center*/
+    /*space between content and inner margin*/
+    padding: 20px;
+    /*margin* and blue as color */
+    border: 1px solid #cccccc;
+    /*border-radius define*/
+    border-radius: 5px;
+    /*text place "cenetr" in elment*/
+    text-align: center;
+  }
