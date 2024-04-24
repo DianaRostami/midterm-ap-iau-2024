@@ -43,4 +43,14 @@ h2 {
   
   button:hover {
     background-color: #f0f0f0;
+    border-color: rgb(36, 0, 179)
   }
+/*using blau color for rounf the button*/
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
