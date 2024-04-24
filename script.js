@@ -7,3 +7,9 @@ function generateRandomPassword(length) {
     }
     return password;
   }
+document.getElementById("generateButton").addEventListener("click", function() {
+    const passwordLength = 10;
+    const generatedPassword = generateRandomPassword(passwordLength);
+    document.getElementById("passwordDisplay").value = generatedPassword;
+  });
+  
