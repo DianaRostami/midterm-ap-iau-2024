@@ -34,3 +34,13 @@ h2 {
     font-size: 20px; /*choose a font*/
   
   }
+/*button setting*/
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #f0f0f0;
+  }
