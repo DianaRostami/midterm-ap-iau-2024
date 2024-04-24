@@ -30,6 +30,36 @@ def count_characters(content):
 
     return character_count
 
+#count_words function
+def count_words(content):
+    """
+    Counts the number of words in the given text content and
+    returns a dictionary containing the count of each word."""
+       
+    words = content.split()  # Split the content into words
+    word_count = {}
+
+    for word in words:
+        if word in word_count:
+            word_count[word] += 1
+        else:
+            word_count[word] = 1
+
+    return word_count, len(words)
+
+
+#count_paragraphs function counts the number of paragraphs in the given text content
+def count_paragraphs(content):
+    # Define paragraph delimiters
+    paragraph_delimiters = ['\n\n', '\r\n\r\n']
+    paragraph_count = 1  # Default is 1 since the text starts with a paragraph
+
+    for delimiter in paragraph_delimiters:
+        paragraph_count += content.count(delimiter)
+
+    return paragraph_count
+
+
 # Select the file
 file_path = "input.txt"
 
@@ -45,3 +75,10 @@ if file_content is not None: #meaning the file was successfully read
     for char in sorted(character_count.keys()):
         count = character_count.get(char, 0)  # Get the count for the character
         print(f"{char}: {count}")
+        
+    # Count words
+    word_count, total_words = count_words(file_content)
+    print("\nNumber of words", total_words)
+    print("Number of repetitions of each word:")
+    for word, count in word_count.items():
+        print(f"{word}: {count}")
