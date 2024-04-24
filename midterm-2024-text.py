@@ -97,3 +97,7 @@ if file_content is not None: #meaning the file was successfully read
     # Count sentences
     sentence_count = count_sentences(file_content)
     print("\nNumber of sentences:", sentence_count)
+    
+    # Count paragraphs
+    paragraph_count = count_paragraphs(file_content)
+    print("Number of paragraphs:", paragraph_count)
