@@ -47,6 +47,17 @@ def count_words(content):
 
     return word_count, len(words)
 
+#count_sentences function counts the number of sentences in the given text content
+def count_sentences(content):
+    # Define a list of sentence-ending punctuation marks
+    sentence_enders = ['.', '!', '?']
+    sentence_count = 0
+
+    for char in content:
+        if char in sentence_enders:
+            sentence_count += 1
+
+    return sentence_count
 
 #count_paragraphs function counts the number of paragraphs in the given text content
 def count_paragraphs(content):
@@ -82,3 +93,7 @@ if file_content is not None: #meaning the file was successfully read
     print("Number of repetitions of each word:")
     for word, count in word_count.items():
         print(f"{word}: {count}")
+           
+    # Count sentences
+    sentence_count = count_sentences(file_content)
+    print("\nNumber of sentences:", sentence_count)
