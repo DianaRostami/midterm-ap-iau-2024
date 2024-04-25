@@ -1,5 +1,7 @@
 #text
 
+import pandas as pd
+
 #We're using this module here to calculate the mean and variance of the counts of vowels and consonants in sentences, paragraphs, and the entire text
 import statistics
 
@@ -136,9 +138,7 @@ if file_content is not None: #meaning the file was successfully read
     silent_letter_count = count_silent_letters(file_content)
     print("Number of silent letters (consonants):", silent_letter_count)
 
-
-import statistics
-
+##########################################################################################
 # Calculate average and variance of vowels and consonants in a given content
 def calculate_average_and_variance(content):
     sentences = content.split('.')  # Split content into sentences
@@ -180,11 +180,6 @@ def calculate_average_and_variance(content):
             paragraph_vowels_avg, paragraph_consonants_avg, paragraph_vowels_var, paragraph_consonants_var,
             text_vowels_avg, text_consonants_avg)
 
-# Select the file
-file_path = "input.txt"
-
-# Call the function to read the file
-file_content = read_text_file(file_path)
 
 if file_content is not None: #meaning the file was successfully read
     # it calls the count_characters function to count the repetitions of each letter and number
@@ -236,3 +231,47 @@ if file_content is not None: #meaning the file was successfully read
 
     print("\nAverage number of vowels in the entire text:", text_vowels_avg)
     print("Average number of consonants in the entire text:", text_consonants_avg)
+
+ # Save to text file
+    with open("output.txt", "w") as text_file:
+        text_file.write("Number of repetitions of each letter and number:\n")
+        for char in sorted(character_count.keys()):
+            count = character_count.get(char, 0)  # Get the count for the character
+            text_file.write(f"{char}: {count}\n")
+        
+        text_file.write("\nNumber of words " + str(total_words) + "\n")
+        text_file.write("Number of repetitions of each word:\n")
+        for word, count in word_count.items():
+            text_file.write(f"{word}: {count}\n")
+           
+        text_file.write("\nNumber of sentences: " + str(sentence_count) + "\n")
+        text_file.write("Number of paragraphs: " + str(paragraph_count) + "\n")
+        text_file.write("Number of English vowels: " + str(vowel_count) + "\n")
+        text_file.write("Number of silent letters (consonants): " + str(silent_letter_count) + "\n")
+        
+        text_file.write("\nAverage number of vowels per sentence: " + str(vowels_avg) + "\n")
+        text_file.write("Variance of vowels per sentence: " + str(vowels_var) + "\n")
+        text_file.write("Average number of consonants per sentence: " + str(consonants_avg) + "\n")
+        text_file.write("Variance of consonants per sentence: " + str(consonants_var) + "\n")
+
+        text_file.write("\nAverage number of vowels per paragraph: " + str(paragraph_vowels_avg) + "\n")
+        text_file.write("Variance of vowels per paragraph: " + str(paragraph_vowels_var) + "\n")
+        text_file.write("Average number of consonants per paragraph: " + str(paragraph_consonants_avg) + "\n")
+        text_file.write("Variance of consonants per paragraph: " + str(paragraph_consonants_var) + "\n")
+
+        text_file.write("\nAverage number of vowels in the entire text: " + str(text_vowels_avg) + "\n")
+        text_file.write("Average number of consonants in the entire text: " + str(text_consonants_avg) + "\n")
+
+    # Save to Excel file
+    data = {
+        "Statistic": ["Average", "Variance"],
+        "Vowels per sentence": [vowels_avg, vowels_var],
+        "Consonants per sentence": [consonants_avg, consonants_var],
+        "Vowels per paragraph": [paragraph_vowels_avg, paragraph_vowels_var],
+        "Consonants per paragraph": [paragraph_consonants_avg, paragraph_consonants_var],
+        "Vowels in entire text": [text_vowels_avg, "N/A"],
+        "Consonants in entire text": [text_consonants_avg, "N/A"]
+    }
+
+    df = pd.DataFrame(data)
+    df.to_excel("output.xlsx", index=False)
