@@ -7,8 +7,8 @@ import string  # For accessing string constants
 
 def generate_password():
     # Define a list of characters for each requirement
-    lowercase_letters = string.ascii_lowercase
-    uppercase_letters = string.ascii_uppercase
+    lowercase_letters = ''.join([c for c in string.ascii_lowercase if c not in 'aeiou'])
+    uppercase_letters = ''.join([c for c in string.ascii_uppercase if c not in 'AEIOU'])
     digits = string.digits
     special_characters = '@#'
     
@@ -23,7 +23,7 @@ def generate_password():
     
     # Fill the remaining characters with random choices
     remaining_length = length - len(required_characters)
-    password_characters = ''.join([random.choice(string.ascii_letters + string.digits + '@#') for _ in range(remaining_length)])
+    password_characters = ''.join([random.choice(lowercase_letters + uppercase_letters + digits + '@#') for _ in range(remaining_length)])
     
     # Combine required characters and remaining characters
     password = ''.join(required_characters + list(password_characters))
