@@ -33,4 +33,13 @@ def generate_password():
     
     return password
 
-print("Generated Password:", generate_password())
+# Generate 10 passwords
+passwords = [generate_password() for _ in range(10)]
+
+# Save passwords to a text file
+with open('passwords.txt', 'w') as file:
+    for password in passwords:
+        file.write(password + '\n')
+
+# Confirming the passwords are generated and saved
+print("Passwords generated and saved successfully!")
