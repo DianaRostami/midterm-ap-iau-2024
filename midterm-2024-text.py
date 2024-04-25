@@ -1,277 +1,125 @@
 #text
 
-import pandas as pd
-
 #We're using this module here to calculate the mean and variance of the counts of vowels and consonants in sentences, paragraphs, and the entire text
 import statistics
+import matplotlib.pyplot as plt
+import string
+import re
 
-#read_text_file function takes an input parameter called file_path, which represents the path to a text file.
-def read_text_file(file_path):
-    try:
-        #open() allows us to open a file in read mode
-        #encoding='utf-8' indicates that we're opening the file in UTF-8 format
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
-        return content  # Return the content of the file
+# Function to count occurrences of each letter and number
+def count_chars(text):
+    chars_count = {char: text.count(char) for char in string.ascii_letters + string.digits}
+    return chars_count
 
-    except FileNotFoundError:
-        print("File not found")
-        return None  # Return None if the file is not found
-    except Exception as e:
-        print("Error:", e)
-        return None  # Return None for any other errors
-
-#cout-characters function takes the content of the text file as input
-#It returns the character_count dictionary containing the count of each character
-def count_characters(content):
-    character_count = {}
-
-    for char in content:
-        if char.isalnum():  # Check if the character is alphanumeric
-            if char in character_count:
-                character_count[char] += 1
-            else:
-                character_count[char] = 1
-
-    return character_count
-
-#count_words function
-def count_words(content):
-    """
-    Counts the number of words in the given text content and
-    returns a dictionary containing the count of each word."""
-       
-    words = content.split()  # Split the content into words
+# Function to count words and their occurrences
+def count_words(text):
+    words = text.split()
     word_count = {}
-
     for word in words:
-        if word in word_count:
-            word_count[word] += 1
-        else:
-            word_count[word] = 1
+        word = word.strip(string.punctuation)
+        if word:
+            word_count[word] = word_count.get(word, 0) + 1
+    return len(words), word_count
 
-    return word_count, len(words)
+# Function to count sentences and paragraphs
+def count_sentences_and_paragraphs(text):
+    sentences = re.split(r'[.!?]+', text)
+    paragraphs = text.split('\n\n')
+    return len(sentences), len(paragraphs)
 
-#count_sentences function counts the number of sentences in the given text content
-def count_sentences(content):
-    # Define a list of sentence-ending punctuation marks
-    sentence_enders = ['.', '!', '?']
-    sentence_count = 0
+# Function to count vowels and consonants
+def count_vowels_and_consonants(text):
+    vowels = 'aeiou'
+    vowel_count = sum(text.lower().count(vowel) for vowel in vowels)
+    consonant_count = sum(text.lower().count(consonant) for consonant in string.ascii_lowercase if consonant not in vowels)
+    return vowel_count, consonant_count
 
-    for char in content:
-        if char in sentence_enders:
-            sentence_count += 1
-
-    return sentence_count
-
-#count_paragraphs function counts the number of paragraphs in the given text content
-def count_paragraphs(content):
-    # Define paragraph delimiters
-    paragraph_delimiters = ['\n\n', '\r\n\r\n']
-    paragraph_count = 1  # Default is 1 since the text starts with a paragraph
-
-    for delimiter in paragraph_delimiters:
-        paragraph_count += content.count(delimiter)
-
-    return paragraph_count
-
-#count_vowels function counts the number of English vowels in the given text content
-def count_vowels(content):
-    vowels = 'aeiouAEIOU'
-    vowel_count = 0
-
-    for char in content:
-        if char in vowels:
-            vowel_count += 1
-
-    return vowel_count
-
-#count_silent_letters function counts the number of silent letters (consonants) in the given text content
-def count_silent_letters(content):
-    consonants = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'
-    silent_letter_count = 0
-
-    for char in content:
-        if char in consonants:
-            silent_letter_count += 1
-
-    return silent_letter_count
-
-
-
-# Select the file
-file_path = "input.txt"
-
-# Call the function to read the file
-file_content = read_text_file(file_path)
-
-if file_content is not None: #meaning the file was successfully read
-    #it calls the count_characters function to count the repetitions of each letter and number
-    character_count = count_characters(file_content)
-    print("Number of repetitions of each letter and number:")
-    
-    #print the count of each letter in alphabetical order
-    for char in sorted(character_count.keys()):
-        count = character_count.get(char, 0)  # Get the count for the character
-        print(f"{char}: {count}")
-        
-    # Count words
-    word_count, total_words = count_words(file_content)
-    print("\nNumber of words", total_words)
-    print("Number of repetitions of each word:")
-    for word, count in word_count.items():
-        print(f"{word}: {count}")
-           
-    # Count sentences
-    sentence_count = count_sentences(file_content)
-    print("\nNumber of sentences:", sentence_count)
-    
-    # Count paragraphs
-    paragraph_count = count_paragraphs(file_content)
-    print("Number of paragraphs:", paragraph_count)
-
-    # Count vowels
-    vowel_count = count_vowels(file_content)
-    print("Number of English vowels:", vowel_count)
-
-    # Count silent letters
-    silent_letter_count = count_silent_letters(file_content)
-    print("Number of silent letters (consonants):", silent_letter_count)
-
-##########################################################################################
-# Calculate average and variance of vowels and consonants in a given content
-def calculate_average_and_variance(content):
-    sentences = content.split('.')  # Split content into sentences
-    paragraphs = content.split('\n\n')  # Split content into paragraphs
-
-    vowels_counts = []
-    consonants_counts = []
-
-    # For each sentence
-    for sentence in sentences:
-        vowels_counts.append(count_vowels(sentence))
-        consonants_counts.append(count_silent_letters(sentence))
-
-    # For each paragraph
-    paragraph_vowels_counts = []
-    paragraph_consonants_counts = []
-    for paragraph in paragraphs:
-        paragraph_vowels_counts.append(count_vowels(paragraph))
-        paragraph_consonants_counts.append(count_silent_letters(paragraph))
-
-    # For the whole text
-    text_vowels_count = count_vowels(content)
-    text_consonants_count = count_silent_letters(content)
-
-    # Calculate average and variance
-    vowels_avg = statistics.mean(vowels_counts)
-    consonants_avg = statistics.mean(consonants_counts)
-    paragraph_vowels_avg = statistics.mean(paragraph_vowels_counts)
-    paragraph_consonants_avg = statistics.mean(paragraph_consonants_counts)
-    text_vowels_avg = text_vowels_count / len(sentences)
-    text_consonants_avg = text_consonants_count / len(sentences)
-
-    vowels_var = statistics.variance(vowels_counts)
-    consonants_var = statistics.variance(consonants_counts)
-    paragraph_vowels_var = statistics.variance(paragraph_vowels_counts)
-    paragraph_consonants_var = statistics.variance(paragraph_consonants_counts)
-
-    return (vowels_avg, consonants_avg, vowels_var, consonants_var,
-            paragraph_vowels_avg, paragraph_consonants_avg, paragraph_vowels_var, paragraph_consonants_var,
-            text_vowels_avg, text_consonants_avg)
-
-
-if file_content is not None: #meaning the file was successfully read
-    # it calls the count_characters function to count the repetitions of each letter and number
-    character_count = count_characters(file_content)
-    print("Number of repetitions of each letter and number:")
-    
-    # print the count of each letter in alphabetical order
-    for char in sorted(character_count.keys()):
-        count = character_count.get(char, 0)  # Get the count for the character
-        print(f"{char}: {count}")
-        
-    # Count words
-    word_count, total_words = count_words(file_content)
-    print("\nNumber of words", total_words)
-    print("Number of repetitions of each word:")
-    for word, count in word_count.items():
-        print(f"{word}: {count}")
-           
-    # Count sentences
-    sentence_count = count_sentences(file_content)
-    print("\nNumber of sentences:", sentence_count)
-    
-    # Count paragraphs
-    paragraph_count = count_paragraphs(file_content)
-    print("Number of paragraphs:", paragraph_count)
-
-    # Count vowels
-    vowel_count = count_vowels(file_content)
-    print("Number of English vowels:", vowel_count)
-
-    # Count silent letters
-    silent_letter_count = count_silent_letters(file_content)
-    print("Number of silent letters (consonants):", silent_letter_count)
-
-    # Calculate average and variance of vowels and consonants
-    (vowels_avg, consonants_avg, vowels_var, consonants_var,
-     paragraph_vowels_avg, paragraph_consonants_avg, paragraph_vowels_var, paragraph_consonants_var,
-     text_vowels_avg, text_consonants_avg) = calculate_average_and_variance(file_content)
-    
-    print("\nAverage number of vowels per sentence:", vowels_avg)
-    print("Variance of vowels per sentence:", vowels_var)
-    print("Average number of consonants per sentence:", consonants_avg)
-    print("Variance of consonants per sentence:", consonants_var)
-
-    print("\nAverage number of vowels per paragraph:", paragraph_vowels_avg)
-    print("Variance of vowels per paragraph:", paragraph_vowels_var)
-    print("Average number of consonants per paragraph:", paragraph_consonants_avg)
-    print("Variance of consonants per paragraph:", paragraph_consonants_var)
-
-    print("\nAverage number of vowels in the entire text:", text_vowels_avg)
-    print("Average number of consonants in the entire text:", text_consonants_avg)
-
- # Save to text file
-    with open("output.txt", "w") as text_file:
-        text_file.write("Number of repetitions of each letter and number:\n")
-        for char in sorted(character_count.keys()):
-            count = character_count.get(char, 0)  # Get the count for the character
-            text_file.write(f"{char}: {count}\n")
-        
-        text_file.write("\nNumber of words " + str(total_words) + "\n")
-        text_file.write("Number of repetitions of each word:\n")
-        for word, count in word_count.items():
-            text_file.write(f"{word}: {count}\n")
-           
-        text_file.write("\nNumber of sentences: " + str(sentence_count) + "\n")
-        text_file.write("Number of paragraphs: " + str(paragraph_count) + "\n")
-        text_file.write("Number of English vowels: " + str(vowel_count) + "\n")
-        text_file.write("Number of silent letters (consonants): " + str(silent_letter_count) + "\n")
-        
-        text_file.write("\nAverage number of vowels per sentence: " + str(vowels_avg) + "\n")
-        text_file.write("Variance of vowels per sentence: " + str(vowels_var) + "\n")
-        text_file.write("Average number of consonants per sentence: " + str(consonants_avg) + "\n")
-        text_file.write("Variance of consonants per sentence: " + str(consonants_var) + "\n")
-
-        text_file.write("\nAverage number of vowels per paragraph: " + str(paragraph_vowels_avg) + "\n")
-        text_file.write("Variance of vowels per paragraph: " + str(paragraph_vowels_var) + "\n")
-        text_file.write("Average number of consonants per paragraph: " + str(paragraph_consonants_avg) + "\n")
-        text_file.write("Variance of consonants per paragraph: " + str(paragraph_consonants_var) + "\n")
-
-        text_file.write("\nAverage number of vowels in the entire text: " + str(text_vowels_avg) + "\n")
-        text_file.write("Average number of consonants in the entire text: " + str(text_consonants_avg) + "\n")
-
-    # Save to Excel file
-    data = {
-        "Statistic": ["Average", "Variance"],
-        "Vowels per sentence": [vowels_avg, vowels_var],
-        "Consonants per sentence": [consonants_avg, consonants_var],
-        "Vowels per paragraph": [paragraph_vowels_avg, paragraph_vowels_var],
-        "Consonants per paragraph": [paragraph_consonants_avg, paragraph_consonants_var],
-        "Vowels in entire text": [text_vowels_avg, "N/A"],
-        "Consonants in entire text": [text_consonants_avg, "N/A"]
+# Function to calculate average and variance of vowels and consonants
+def calculate_avg_and_variance(text):
+    sentences = re.split(r'[.!?]+', text)
+    paragraphs = text.split('\n\n')
+    vowels_per_sentence = [sum(1 for char in sentence if char.lower() in 'aeiou') for sentence in sentences if sentence]
+    consonants_per_sentence = [sum(1 for char in sentence if char.isalpha() and char.lower() not in 'aeiou') for sentence in sentences if sentence]
+    vowels_per_paragraph = [sum(1 for char in paragraph if char.lower() in 'aeiou') for paragraph in paragraphs if paragraph]
+    consonants_per_paragraph = [sum(1 for char in paragraph if char.isalpha() and char.lower() not in 'aeiou') for paragraph in paragraphs if paragraph]
+    vowels_total = sum(vowels_per_sentence)
+    consonants_total = sum(consonants_per_sentence)
+    avg_vowels_sentence = sum(vowels_per_sentence) / len(vowels_per_sentence) if vowels_per_sentence else 0
+    avg_consonants_sentence = sum(consonants_per_sentence) / len(consonants_per_sentence) if consonants_per_sentence else 0
+    avg_vowels_paragraph = sum(vowels_per_paragraph) / len(vowels_per_paragraph) if vowels_per_paragraph else 0
+    avg_consonants_paragraph = sum(consonants_per_paragraph) / len(consonants_per_paragraph) if consonants_per_paragraph else 0
+    variance_vowels_sentence = sum((vowels - avg_vowels_sentence) ** 2 for vowels in vowels_per_sentence) / len(vowels_per_sentence) if vowels_per_sentence else 0
+    variance_consonants_sentence = sum((consonants - avg_consonants_sentence) ** 2 for consonants in consonants_per_sentence) / len(consonants_per_sentence) if consonants_per_sentence else 0
+    variance_vowels_paragraph = sum((vowels - avg_vowels_paragraph) ** 2 for vowels in vowels_per_paragraph) / len(vowels_per_paragraph) if vowels_per_paragraph else 0
+    variance_consonants_paragraph = sum((consonants - avg_consonants_paragraph) ** 2 for consonants in consonants_per_paragraph) / len(consonants_per_paragraph) if consonants_per_paragraph else 0
+    return {
+        'avg_vowels_sentence': avg_vowels_sentence,
+        'variance_vowels_sentence': variance_vowels_sentence,
+        'avg_consonants_sentence': avg_consonants_sentence,
+        'variance_consonants_sentence': variance_consonants_sentence,
+        'avg_vowels_paragraph': avg_vowels_paragraph,
+        'variance_vowels_paragraph': variance_vowels_paragraph,
+        'avg_consonants_paragraph': avg_consonants_paragraph,
+        'variance_consonants_paragraph': variance_consonants_paragraph,
+        'total_vowels': vowels_total,
+        'total_consonants': consonants_total
     }
 
-    df = pd.DataFrame(data)
-    df.to_excel("output.xlsx", index=False)
+# Function to save data to a text file
+def save_to_text(data, filename):
+    with open(filename, 'w') as file:
+        for key, value in data.items():
+            file.write(f"{key}: {value}\n")
+
+# Function to save data to an Excel file
+def save_to_excel(data, filename):
+    df = pd.DataFrame.from_dict(data, orient='index', columns=['Value'])
+    df.to_excel(filename)
+
+# Function to create a plot of sentence number vs. number of vowels
+def plot_vowels_per_sentence(text):
+    sentences = re.split(r'[.!?]+', text)
+    vowel_counts = [sum(1 for char in sentence if char.lower() in 'aeiou') for sentence in sentences if sentence]
+    plt.plot(range(1, len(vowel_counts) + 1), vowel_counts, marker='o', linestyle='-')
+    plt.xlabel('Sentence Number')
+    plt.ylabel('Number of Vowels')
+    plt.title('Number of Vowels per Sentence')
+    plt.grid(True)
+    plt.show()
+
+# Read the text file
+with open('input.txt', 'r') as file:
+    text_content = file.read()
+
+# Analyze the text
+char_count = count_chars(text_content)
+word_count, word_occurrences = count_words(text_content)
+sentence_count, paragraph_count = count_sentences_and_paragraphs(text_content)
+vowel_count, consonant_count = count_vowels_and_consonants(text_content)
+avg_and_variance = calculate_avg_and_variance(text_content)
+
+# Print the analysis results
+print("Number of repetitions of each letter and number:")
+print(char_count)
+print("\nNumber of words and the number of repetitions of each:")
+print(f"Total words: {word_count}")
+print(word_occurrences)
+print("\nNumber of sentences:", sentence_count)
+print("\nNumber of paragraphs:", paragraph_count)
+print("\nNumber of vowels:", vowel_count)
+print("Number of consonants:", consonant_count)
+print("\nAverage and variance of vowels and consonants:")
+for key, value in avg_and_variance.items():
+    print(f"{key}: {value}")
+
+# Save the printed output in text and Excel files
+output_data = {
+    "Number of repetitions of each letter and number": char_count,
+    "Number of words": word_count,
+    "Word occurrences": word_occurrences,
+    "Number of sentences": sentence_count,
+    "Number of paragraphs": paragraph_count,
+    "Number of vowels": vowel_count,
+    "Number of consonants": consonant_count,
+    "Average and variance of vowels and consonants": avg_and_variance
+}
