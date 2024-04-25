@@ -1,10 +1,10 @@
 #text
+#midterm question no.2
 
-#We're using this module here to calculate the mean and variance of the counts of vowels and consonants in sentences, paragraphs, and the entire text
-import statistics
-import matplotlib.pyplot as plt
-import string
-import re
+import pandas as pd  # Import pandas library for data manipulation and analysis
+import matplotlib.pyplot as plt  # Import matplotlib library for creating plots
+import string  # Import string module for string manipulation
+import re  # Import re module for regular expressions
 
 # Function to count occurrences of each letter and number
 def count_chars(text):
@@ -73,8 +73,21 @@ def save_to_text(data, filename):
 
 # Function to save data to an Excel file
 def save_to_excel(data, filename):
-    df = pd.DataFrame.from_dict(data, orient='index', columns=['Value'])
-    df.to_excel(filename)
+    flat_data = flatten_dict(data)
+    df = pd.DataFrame(flat_data.items(), columns=['Attribute', 'Value'])
+    df.to_excel(filename, index=False)
+
+# Function to flatten nested dictionaries
+def flatten_dict(d, parent_key='', sep='_'):
+    items = []
+    for k, v in d.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
 
 # Function to create a plot of sentence number vs. number of vowels
 def plot_vowels_per_sentence(text):
@@ -123,3 +136,10 @@ output_data = {
     "Number of consonants": consonant_count,
     "Average and variance of vowels and consonants": avg_and_variance
 }
+
+# Save the printed output in text and Excel files
+save_to_text(output_data, 'output.txt')
+save_to_excel(output_data, 'output.xlsx')
+
+# Create a plot of sentence number vs. number of vowels
+plot_vowels_per_sentence(text_content)
