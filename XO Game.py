@@ -17,8 +17,8 @@ class GameBoard:
 def check_winner(self, symbol):
         for i in range(3):
                # Check rows and columns for a winning pattern
-            if all(self.board[i][j] == symbol for j in range(3)):
-                return True
+            if all(self.board[i][j] == symbol for j in range(3)): 
+                return True 
             if all(self.board[j][i] == symbol for j in range(3)):
                 return True
              # Check diagonals for a winning pattern
@@ -31,32 +31,38 @@ def check_winner(self, symbol):
      # Method to make a move on the board
     def make_move(self, row, col, symbol):
         if self.board[row][col] == ' ':
-            self.board[row][col] = symbol
-            return True
+            self.board[row][col] = symbol # Place the player's symbol on the board
+            return True # Move is valid
         else:
             print("Invalid move. Try again.")
-            return False
+            return False # Move is invalid
+# Define a class for the game
 class Game:
     def __init__(self, player1, player2):
-        self.player1 = player1
-        self.player2 = player2
-        self.board = GameBoard()
- def start(self):
-        current_player = self.player1
+        self.player1 = player1  # Player 1 object
+        self.player2 = player2  # Player 2 object
+        self.board = GameBoard() # Initialize the game board 
+# Method to start the game
+def start(self):
+        current_player = self.player1  # Player 1 starts the game
         while True:
             print(f"{current_player.name}'s turn ({current_player.symbol})")
-            self.board.display()
+            self.board.display() # Display the current state of the board
             row = int(input("Enter row (0, 1, or 2): "))
             col = int(input("Enter column (0, 1, or 2): "))
+              # Make a move on the board
             if self.board.make_move(row, col, current_player.symbol):
+                   # Check if the current player wins
                 if self.board.check_winner(current_player.symbol):
                     print(f"Congratulations! {current_player.name} wins!")
-                    break
+                    break 
                 elif self.board.is_full():
                     print("It's a tie!")
-                    break
+                    break # End the game
                 else:
+                       # Switch to the other player for the next turn
                     current_player = self.player2 if current_player == self.player1 else self.player1
+# Example of how to use the classes to play the game
 player1 = Player("Player 1", 'X')
 player2 = Player("Player 2", 'O')
 game = Game(player1, player2)
