@@ -20,7 +20,7 @@ def check_winner(self, symbol):
         return False
     def is_full(self):
         return all(self.board[i][j] != ' ' for i in range(3) for j in range(3))
-
+        
     def make_move(self, row, col, symbol):
         if self.board[row][col] == ' ':
             self.board[row][col] = symbol
@@ -28,3 +28,8 @@ def check_winner(self, symbol):
         else:
             print("Invalid move. Try again.")
             return False
+class Game:
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+        self.board = GameBoard()
