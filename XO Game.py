@@ -6,23 +6,29 @@ class Player:
 # Define a class for the game board
 class GameBoard:
     def __init__(self):
+        # Initialize an empty 3x3 board
         self.board = [[' ' for _ in range(3)] for _ in range(3)]
+ # Method to display the current state of the board
  def display(self):
         for row in self.board:
-            print('|'.join(row))
-            print('-' * 5)
+            print('|'.join(row))# Print each row of the board
+            print('-' * 5)# Print a separator line
+# Method to check if a player has won
 def check_winner(self, symbol):
         for i in range(3):
+               # Check rows and columns for a winning pattern
             if all(self.board[i][j] == symbol for j in range(3)):
                 return True
             if all(self.board[j][i] == symbol for j in range(3)):
                 return True
+             # Check diagonals for a winning pattern
         if all(self.board[i][i] == symbol for i in range(3)) or all(self.board[i][2 - i] == symbol for i in range(3)):
             return True
         return False
+    # Method to check if the board is full
     def is_full(self):
         return all(self.board[i][j] != ' ' for i in range(3) for j in range(3))
-        
+     # Method to make a move on the board
     def make_move(self, row, col, symbol):
         if self.board[row][col] == ' ':
             self.board[row][col] = symbol
@@ -51,3 +57,7 @@ class Game:
                     break
                 else:
                     current_player = self.player2 if current_player == self.player1 else self.player1
+player1 = Player("Player 1", 'X')
+player2 = Player("Player 2", 'O')
+game = Game(player1, player2)
+game.start()
