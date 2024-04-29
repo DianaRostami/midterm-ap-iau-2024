@@ -33,9 +33,17 @@ def check_winner(self, symbol):
         if self.board[row][col] == ' ':
             self.board[row][col] = symbol # Place the player's symbol on the board
             return True # Move is valid
+            try:
+            if self.board[row][col] == ' ':
+                self.board[row][col] = symbol
+                return True
         else:
             print("Invalid move. Try again.")
             return False # Move is invalid
+          except IndexError:
+            print("Enter right amount")
+            return False
+
 # Define a class for the game
 class Game:
     def __init__(self, player1, player2):
@@ -48,22 +56,28 @@ def start(self):
         while True:
             print(f"{current_player.name}'s turn ({current_player.symbol})")
             self.board.display() # Display the current state of the board
+            try:
             row = int(input("Enter row (0, 1, or 2): "))
             col = int(input("Enter column (0, 1, or 2): "))
-              # Make a move on the board
-            if self.board.make_move(row, col, current_player.symbol):
-                   # Check if the current player wins
-                if self.board.check_winner(current_player.symbol):
-                    print(f"Congratulations! {current_player.name} wins!")
-                    break 
+               if 0 <= row <= 2 and 0 <= col <= 2:  # Check if row and col are within valid range
+                    if self.board.make_move(row, col, current_player.symbol):
+                        if self.board.check_winner(current_player.symbol):
+                            print(f"Congratulations! {current_player.name} wins!")
+                            break
                 elif self.board.is_full():
                     print("It's a tie!")
                     break # End the game
                 else:
                        # Switch to the other player for the next turn
                     current_player = self.player2 if current_player == self.player1 else self.player1
+            else:
+                    print("Enter right amount")  # Print error message for invalid row or col
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
 # Example of how to use the classes to play the game
 player1 = Player("Player 1", 'X')
 player2 = Player("Player 2", 'O')
 game = Game(player1, player2)
 game.start()
+
