@@ -47,7 +47,7 @@ class Game:
         self.player1 = player1  # Player 1 object
         self.player2 = player2  # Player 2 object
         self.board = GameBoard() # Initialize the game board 
-# Method to start the game
+# Method to start the game 
     def start(self):
         current_player = self.player1  # Player 1 starts the game
         while True:
