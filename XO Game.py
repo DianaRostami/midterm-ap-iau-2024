@@ -9,7 +9,7 @@ class GameBoard:
         # Initialize an empty 3x3 board
         self.board = [[' ' for _ in range(3)] for _ in range(3)]
  # Method to display the current state of the board
- def display(self):
+    def display(self):
         for row in self.board:
             print('|'.join(row))# Print each row of the board
             print('-' * 5)# Print a separator line
@@ -26,21 +26,18 @@ def check_winner(self, symbol):
             return True
         return False
     # Method to check if the board is full
-    def is_full(self):
+def is_full(self):
         return all(self.board[i][j] != ' ' for i in range(3) for j in range(3))
      # Method to make a move on the board
-    def make_move(self, row, col, symbol):
+def make_move(self, row, col, symbol):
+    try:
         if self.board[row][col] == ' ':
             self.board[row][col] = symbol # Place the player's symbol on the board
             return True # Move is valid
-            try:
-            if self.board[row][col] == ' ':
-                self.board[row][col] = symbol
-                return True
         else:
             print("Invalid move. Try again.")
             return False # Move is invalid
-          except IndexError:
+    except IndexError:
             print("Enter right amount")
             return False
 
@@ -51,7 +48,7 @@ class Game:
         self.player2 = player2  # Player 2 object
         self.board = GameBoard() # Initialize the game board 
 # Method to start the game
-def start(self):
+   def start(self):
         current_player = self.player1  # Player 1 starts the game
         while True:
             print(f"{current_player.name}'s turn ({current_player.symbol})")
@@ -64,17 +61,17 @@ def start(self):
                         if self.board.check_winner(current_player.symbol):
                             print(f"Congratulations! {current_player.name} wins!")
                             break
-                elif self.board.is_full():
-                    print("It's a tie!")
-                    break # End the game
+                         elif self.board.is_full():
+                            print("It's a tie!")
+                            break
+                        else:
+                            current_player = self.player2 if current_player == self.player1 else self.player1
                 else:
-                       # Switch to the other player for the next turn
-                    current_player = self.player2 if current_player == self.player1 else self.player1
-            else:
                     print("Enter right amount")  # Print error message for invalid row or col
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
+                 
 # Example of how to use the classes to play the game
 player1 = Player("Player 1", 'X')
 player2 = Player("Player 2", 'O')
