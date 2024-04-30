@@ -48,20 +48,20 @@ class Game:
         self.player2 = player2  # Player 2 object
         self.board = GameBoard() # Initialize the game board 
 # Method to start the game
-   def start(self):
+    def start(self):
         current_player = self.player1  # Player 1 starts the game
         while True:
             print(f"{current_player.name}'s turn ({current_player.symbol})")
             self.board.display() # Display the current state of the board
             try:
-            row = int(input("Enter row (0, 1, or 2): "))
-            col = int(input("Enter column (0, 1, or 2): "))
-               if 0 <= row <= 2 and 0 <= col <= 2:  # Check if row and col are within valid range
+                row = int(input("Enter row (0, 1, or 2): "))
+                col = int(input("Enter column (0, 1, or 2): "))
+                if 0 <= row <= 2 and 0 <= col <= 2:  # Check if row and col are within valid range
                     if self.board.make_move(row, col, current_player.symbol):
                         if self.board.check_winner(current_player.symbol):
                             print(f"Congratulations! {current_player.name} wins!")
                             break
-                         elif self.board.is_full():
+                        elif self.board.is_full():
                             print("It's a tie!")
                             break
                         else:
